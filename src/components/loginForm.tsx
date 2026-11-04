@@ -60,7 +60,7 @@ const LoginForm = () => {
             className="border border-border p-3 rounded-input w-full mt-1"
           />
           {errors.username && (
-            <p className="text-sm text-error">{errors.username.message}</p>
+            <p className="text-sm text-danger">{errors.username.message}</p>
           )}
         </div>
         <div>
@@ -74,20 +74,20 @@ const LoginForm = () => {
             className="border border-border p-3 rounded-input w-full mt-1"
           />
           {errors.password && (
-            <p className="text-sm text-error">{errors.password.message}</p>
+            <p className="text-sm text-danger">{errors.password.message}</p>
           )}
         </div>
 
         <button
           disabled={isSubmitting}
-          className="w-full bg-primary text-white px-6 py-3 rounded-button text-sm font-semibold cursor-pointer  disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? "Loggin in..." : "Log In"}
         </button>
       </form>
-      <p className="text-center text-sm mt-5 text-primary">
+      <p className="text-center text-sm mt-5 ">
         New to Shop?
-        <Link href="/signup" className="text-success underline">
+        <Link href="/signup" className="text-accent underline text-link font-medium">
           Create an Account
         </Link>
       </p>

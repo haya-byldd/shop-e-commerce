@@ -38,7 +38,7 @@ const schema = z
   });
 
 type SignupData = z.infer<typeof schema>;
-const errorClass = "text-sm text-error";
+const errorClass = "text-sm text-danger";
 
 const SignUpForm = () => {
   const {
@@ -184,14 +184,14 @@ const SignUpForm = () => {
 
         <button
           disabled={isSubmitting}
-          className="w-full bg-primary text-white px-6 py-3 rounded-button text-sm font-semibold cursor-pointer"
+          className="w-full btn-primary"
         >
           {isSubmitting ? "Creating account..." : "Create account"}
         </button>
       </form>
-      <p className="text-center text-sm mt-5 text-primary">
+      <p className="text-center text-sm mt-5">
         Already have an account?
-        <Link href="/login" className="text-success underline">
+        <Link href="/login" className="text-accent underline font-medium text-link">
           Log In
         </Link>
       </p>
