@@ -61,7 +61,7 @@ const ProductFilters = () => {
 
 
     return (
-        <aside className="max-w-2xs w-full border border-solid border-border p-4 h-150 rounded-card">
+        <aside className="sticky top-24 self-start shrink-0 max-w-2xs w-full border border-solid border-border p-4 h-150 rounded-card">
             <div className=" border-border border-b">
                 <h3 className="text-lg font-medium">Filters</h3>
             </div>

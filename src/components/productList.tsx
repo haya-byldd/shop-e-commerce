@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaRegHeart } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -75,6 +76,14 @@ const ProductList = () => {
                   <FaStar className="text-amber-500" />
                   {rating}
                 </span>
+
+                <button
+                  type="button"
+                  aria-label="add to favorites"
+                  className="absolute bottom-3 right-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-border bg-background hover:shadow-md"
+                >
+                  <FaRegHeart />
+                </button>
               </div>
 
               {/* Product Details */}
@@ -93,12 +102,21 @@ const ProductList = () => {
                   <p className="text-xs text-muted">Incl. discount</p>
                 </div>
 
-                <button
-                  type="button"
-                  className="w-full rounded-lg btn-primary cursor-pointer"
-                >
-                  View Product
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className="flex-1 rounded-lg btn-primary cursor-pointer"
+                  >
+                    View Product
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="add to cart"
+                    className="flex cursor-pointer items-center justify-center rounded-lg border border-border shadow-sm px-3 bg-surface hover:bg-bg"
+                  >
+                    <HiOutlineShoppingBag />
+                  </button>
+                </div>
               </div>
             </article>
           );

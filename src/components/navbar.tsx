@@ -11,7 +11,7 @@ const navLinks = [
 
 const Navbar = () => {
   return (
-    <header className="border border-b border-border bg-bg">
+    <header className="sticky top-0 z-50 border border-b border-border bg-bg">
       <nav aria-label="main-navigation"className="mx-auto w-full max-w-370 flex items-center justify-between gap-6 px-6 py-4 md:px-8">
         <div className="flex flex-1 items-center gap-6">
             <Link href="/" className="text-xl font-bold tracking-tight">Shop</Link>
