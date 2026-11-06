@@ -46,18 +46,18 @@ const stockOptions = [
   }
 ]
 const ProductFilters = () => {
-    const [category, setCategory] = useState([]);
+    // const [category, setCategory] = useState([]);
 
-    const getCategories = async () => {
-        const res = await fetch(`https://dummyjson.com/products/categories`);
-        const data = await res.json();
-        console.log(data)
-        setCategory(data)
-    }
+    // const getCategories = async () => {
+    //     const res = await fetch(`https://dummyjson.com/products/categories`);
+    //     const data = await res.json();
+    //     console.log(data)
+    //     setCategory(data)
+    // }
 
-    useEffect(() => {
-        getCategories()
-    },[])
+    // useEffect(() => {
+    //     getCategories()
+    // },[])
 
 
     return (

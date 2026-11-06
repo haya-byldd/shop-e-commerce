@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FaStar, FaRegHeart } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
+import Link from "next/link";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -11,7 +12,6 @@ const ProductList = () => {
   const limit = 20;
   const totalPages = Math.ceil(totalProduct / limit);
   const skip = (currentPage - 1) * limit;
-
 
   const handlePreviousPage = () => {
     setCurrentPage(currentPage - 1);
@@ -22,14 +22,20 @@ const ProductList = () => {
   };
 
   const fetchProducts = async () => {
-    const res = await fetch(
-      `https://dummyjson.com/products?limit=${limit}&skip=${skip}`,
-    );
-    const data = await res.json();
-    const productsData = data.products;
-    setTotalProduct(data.total);
-    setProducts(productsData);
+    try {
+      const res = await fetch(
+        `https://dummyjson.com/products?limit=${limit}&skip=${skip}`,
+      );
+      const data = await res.json();
+      const productsData = data.products;
+      setTotalProduct(data.total);
+      setProducts(productsData);
+    } catch (e) {
+      console.log(e);
+    }
   };
+
+
   useEffect(() => {
     fetchProducts();
   }, [currentPage]);
@@ -65,6 +71,7 @@ const ProductList = () => {
                   alt={title}
                   width={300}
                   height={300}
+                  loading="eager"
                   className="h-full w-full object-contain"
                 />
 
@@ -103,12 +110,12 @@ const ProductList = () => {
                 </div>
 
                 <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className="flex-1 rounded-lg btn-primary cursor-pointer"
+                  <Link
+                    href={`/product/${id}`}
+                    className="flex-1 rounded-lg btn-primary cursor-pointer text-center"
                   >
                     View Product
-                  </button>
+                  </Link>
                   <button
                     type="button"
                     aria-label="add to cart"
@@ -134,7 +141,7 @@ const ProductList = () => {
         <p className="font-medium text-sm">
           {currentPage} of {totalPages}
         </p>
-     
+
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
