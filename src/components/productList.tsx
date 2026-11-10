@@ -26,6 +26,7 @@ const ProductList = () => {
       );
       const data = await res.json();
       const productsData = data.products;
+      console.log(productsData)
       setTotalProduct(data.total);
       setProducts(productsData);
     } catch (e) {
@@ -36,6 +37,14 @@ const ProductList = () => {
   useEffect(() => {
     fetchProducts();
   }, [currentPage]);
+
+  if(!products){
+    return(
+      <main className="flex justify-center items-center">
+        <p className="text-link text-xl font-bold">Loading...</p>
+      </main>
+    )
+  }
 
   return (
     <section className="py-8 space-y-6 flex-1">
@@ -48,7 +57,9 @@ const ProductList = () => {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {products.map((product) => {
-          return <ProductCard key={product.id} product={product} />;
+          return(
+            <ProductCard key={product.id} product={product}/>
+          )
         })}
       </div>
       <div className="flex justify-center items-center gap-10 mt-10">

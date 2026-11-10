@@ -1,20 +1,27 @@
+
 "use client";
+
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ProductOverview from "@/components/productOverview";
 import ProductInformation from "@/components/productInformation";
 import ProductReviews from "@/components/productReviews";
 import { ProductDetail } from "@/types/product";
 
-const ProductDetails = () => {
+const ProductDetailsContent = () => {
   const { id } = useParams();
-  const [productDetail, setProductDetail] = useState<ProductDetail | null>(null);
+
+  const [productDetail, setProductDetail] =
+    useState<ProductDetail | null>(null);
 
   const getProductDetail = async () => {
     try {
-      const response = await fetch(`https://dummyjson.com/products/${id}`);
+      const response = await fetch(
+        `https://dummyjson.com/products/${id}`
+      );
+
       const data = await response.json();
-      setProductDetail(data );
+      setProductDetail(data);
     } catch (e) {
       console.log(e);
     }
@@ -27,7 +34,9 @@ const ProductDetails = () => {
   if (!productDetail) {
     return (
       <main className="flex justify-center items-center h-dvh">
-        <h1 className="font-semibold text-lg text-amber-600">Loading</h1>
+        <h1 className="font-semibold text-lg text-amber-600">
+          Loading
+        </h1>
       </main>
     );
   }
@@ -38,6 +47,14 @@ const ProductDetails = () => {
       <ProductInformation product={productDetail} />
       <ProductReviews product={productDetail} />
     </main>
+  );
+};
+
+const ProductDetails = () => {
+  return (
+    <Suspense fallback={<p>Loading product details...</p>}>
+      <ProductDetailsContent />
+    </Suspense>
   );
 };
 

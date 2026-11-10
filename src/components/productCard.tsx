@@ -1,35 +1,35 @@
 "use client";
-import { FaStar, FaRegHeart } from "react-icons/fa";
+import { FaStar, FaRegHeart, FaHeart } from "react-icons/fa";
 import Image from "next/image";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import { ProductDetail } from "@/types/product";
 import Link from "next/link";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { ProductDetail } from "@/types/product";
 
 const ProductCard = ({ product }: { product: ProductDetail }) => {
   const { id, thumbnail, brand, title, price, rating, discountPercentage } =
     product;
+  const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    const getWishListProd = JSON.parse(localStorage.getItem("wishList") || "[]");
+    const isAlreadyExist = getWishListProd.some((wishListProd: ProductDetail) => wishListProd.id === id);
+    setIsLiked(isAlreadyExist);
+  },[id]);
 
   const handleWishList = () => {
-    // first item - current item needs to be added in local storage
-    // second item - i need to preserver the existing one and add the new item
+    const getWishListProd = JSON.parse(localStorage.getItem("wishList") || "[]");
+    if(isLiked){
+    const updatedWishlist = getWishListProd.filter((wishListProd: ProductDetail) => wishListProd.id !== id);
+    setIsLiked(false)
+   localStorage.setItem("wishList", JSON.stringify(updatedWishlist));
+    }else{
+    localStorage.setItem("wishList", JSON.stringify([...getWishListProd, product]));
+    setIsLiked(true)
+    
+  }
+}
 
-    const favourites = JSON.parse(localStorage.getItem("favourites") || "[]");
-
-    const isExisting = favourites.some(
-      (favouriteProd: ProductDetail) => favouriteProd.id === id,
-    );
-
-    if (!isExisting) {
-      localStorage.setItem(
-        "favourites",
-        JSON.stringify([...favourites, product]),
-      );
-      toast(`${title} was added to wishlist`);
-    } else {
-      toast(`${title} already exists in wishlist`);
-    }
-  };
 
   return (
     <article className="rounded-card border border-border bg-bg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -57,7 +57,7 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
           aria-label="add to favorites"
           className="absolute bottom-3 right-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-border bg-bg hover:shadow-md"
         >
-          <FaRegHeart />
+          {isLiked ? <FaHeart className="text-red-600" /> : <FaRegHeart />}
         </button>
       </div>
 
@@ -95,5 +95,6 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
     </article>
   );
 };
+
 
 export default ProductCard;
