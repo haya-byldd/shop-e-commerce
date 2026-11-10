@@ -1,8 +1,29 @@
+"use client"
 import Image from "next/image";
 import { FaMinus, FaPlus, FaRegHeart, FaStar } from "react-icons/fa";
 import { ProductDetail } from "@/types/product";
+import { useState } from "react";
+import Link from "next/link";
+import { BsShieldCheck } from "react-icons/bs";
+import { LiaShippingFastSolid } from "react-icons/lia";
 
-const ProductOverview = ({ product }: { product: ProductDetail }) => {
+const ProductOverview = ({ product}: { product: ProductDetail }) => {
+  const [quantity, setQuantity] = useState<number>(1);
+
+  const handleDecreaseQuantity = () => {
+ setQuantity((prevQuantity) => {
+ if(prevQuantity > 1){
+  return prevQuantity - 1;
+ }return prevQuantity
+    
+  })
+  }
+const handleIncreaseQuantity = () => {
+  setQuantity((prevQuantity) => {
+    return prevQuantity + 1
+  })
+}
+
   return (
     <section>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -78,34 +99,36 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
           </div>
           <div className="border-t border-border my-7"></div>
           <div className="flex flex-wrap gap-3">
-            <div className="flex items-center border border-border rounded-button bg-surface overflow-hidden">
+            <div className="flex items-center border border-border rounded-button overflow-hidden">
               <button
+              onClick={handleDecreaseQuantity}
                 id="decrease"
-                className="px-4 py-3 hover:bg-fg-muted"
+                className="px-4 py-3 hover:bg-btn hover:text-bg hover:rounded-button bg-surface overflow-hidden disabled:cursor-not-allowed" disabled={quantity === 1}
                 aria-label="Decrease quantity"
               >
                 <FaMinus className="text-xs" />
               </button>
 
               <span id="quantity" className="px-3 text-sm">
-                1
+                {quantity}
               </span>
 
               <button
+               onClick={handleIncreaseQuantity}
                 id="increase"
-                className="px-4 py-3 hover:bg-fg-muted"
+                className="px-4 py-3 hover:bg-btn hover:text-bg hover:rounded-button bg-surface overflow-hidden"
                 aria-label="Increase quantity"
               >
                 <FaPlus className="text-xs" />
               </button>
             </div>
 
-            <button className="flex-1  text-sm font-medium btn-primary transition">
+            <Link href="/cart" className="flex-1 text-center text-sm font-medium btn-primary transition">
               Add to Cart
-            </button>
+            </Link>
 
             <button
-              className="border border-border rounded-button bg-surface px-4 hover:bg-fg-muted transition"
+              className=" cursor-pointer border border-border rounded-button hover:text-bg bg-surface px-4 hover:bg-btn transition"
               aria-label="Add to wishlist"
             >
               <FaRegHeart />
@@ -116,14 +139,14 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
           </p>
           <div className="grid sm:grid-cols-2 gap-5 bg-surface rounded-card p-5 mt-8">
             <div>
-              <h4 className="font-medium text-sm">Shipping</h4>
+              <h4 className="font-medium text-sm flex gap-2"><span><LiaShippingFastSolid size={17} /></span>Shipping</h4>
               <p className="text-xs text-gray-500 mt-2">
                 {product.shippingInformation}
               </p>
             </div>
 
             <div>
-              <h4 className="font-medium text-sm"> Warranty</h4>
+              <h4 className="font-medium text-sm flex gap-2"><span><BsShieldCheck size={15}/></span> Warranty</h4>
               <p className="text-xs text-gray-500 mt-2">
                 {product.warrantyInformation}
               </p>

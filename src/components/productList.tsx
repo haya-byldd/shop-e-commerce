@@ -1,12 +1,10 @@
 "use client";
-import Image from "next/image";
-import { FaStar, FaRegHeart } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
-import Link from "next/link";
+import { ProductDetail } from "@/types/product";
+import ProductCard from "./productCard";
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<ProductDetail[]>([]);
   const [totalProduct, setTotalProduct] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 20;
@@ -35,7 +33,6 @@ const ProductList = () => {
     }
   };
 
-
   useEffect(() => {
     fetchProducts();
   }, [currentPage]);
@@ -51,82 +48,7 @@ const ProductList = () => {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {products.map((product) => {
-          const {
-            id,
-            thumbnail,
-            brand,
-            title,
-            price,
-            rating,
-            discountPercentage,
-          } = product;
-          return (
-            <article
-              key={id}
-              className="rounded-card border border-border bg-background transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="relative flex aspect-square items-center justify-center bg-surface p-5">
-                <Image
-                  src={thumbnail}
-                  alt={title}
-                  width={300}
-                  height={300}
-                  loading="eager"
-                  className="h-full w-full object-contain"
-                />
-
-                <span className="absolute left-3 top-3 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                  {Math.round(discountPercentage)}% OFF
-                </span>
-
-                <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-xs font-medium">
-                  <FaStar className="text-amber-500" />
-                  {rating}
-                </span>
-
-                <button
-                  type="button"
-                  aria-label="add to favorites"
-                  className="absolute bottom-3 right-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-border bg-background hover:shadow-md"
-                >
-                  <FaRegHeart />
-                </button>
-              </div>
-
-              {/* Product Details */}
-              <div className="space-y-3 p-4">
-                <p className="text-xs font-medium uppercase tracking-wider text-muted">
-                  {brand || "Shop's Product"}
-                </p>
-
-                <h3 className="min-h-12 text-sm font-semibold leading-6">
-                  {title}
-                </h3>
-
-                <div className="flex items-center gap-2">
-                  <p className="text-lg font-bold">${price}</p>
-
-                  <p className="text-xs text-muted">Incl. discount</p>
-                </div>
-
-                <div className="flex gap-2">
-                  <Link
-                    href={`/product/${id}`}
-                    className="flex-1 rounded-lg btn-primary cursor-pointer text-center"
-                  >
-                    View Product
-                  </Link>
-                  <button
-                    type="button"
-                    aria-label="add to cart"
-                    className="flex cursor-pointer items-center justify-center rounded-lg border border-border shadow-sm px-3 bg-surface hover:bg-bg"
-                  >
-                    <HiOutlineShoppingBag />
-                  </button>
-                </div>
-              </div>
-            </article>
-          );
+          return <ProductCard key={product.id} product={product} />;
         })}
       </div>
       <div className="flex justify-center items-center gap-10 mt-10">

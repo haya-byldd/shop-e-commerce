@@ -13,8 +13,8 @@ const ProductDetails = () => {
   const getProductDetail = async () => {
     try {
       const response = await fetch(`https://dummyjson.com/products/${id}`);
-      const data: ProductDetail = await response.json();
-      setProductDetail(data);
+      const data = await response.json();
+      setProductDetail(data );
     } catch (e) {
       console.log(e);
     }
