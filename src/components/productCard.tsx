@@ -5,6 +5,7 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ProductDetail } from "@/types/product";
+import { toast } from "sonner";
 
 const ProductCard = ({ product }: { product: ProductDetail }) => {
   const { id, thumbnail, brand, title, price, rating, discountPercentage } =
@@ -12,24 +13,35 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    const getWishListProd = JSON.parse(localStorage.getItem("wishList") || "[]");
-    const isAlreadyExist = getWishListProd.some((wishListProd: ProductDetail) => wishListProd.id === id);
+    const getWishListProd = JSON.parse(
+      localStorage.getItem("wishList") || "[]",
+    );
+    const isAlreadyExist = getWishListProd.some(
+      (wishListProd: ProductDetail) => wishListProd.id === id,
+    );
     setIsLiked(isAlreadyExist);
-  },[id]);
+  }, [id]);
 
   const handleWishList = () => {
-    const getWishListProd = JSON.parse(localStorage.getItem("wishList") || "[]");
-    if(isLiked){
-    const updatedWishlist = getWishListProd.filter((wishListProd: ProductDetail) => wishListProd.id !== id);
-    setIsLiked(false)
-   localStorage.setItem("wishList", JSON.stringify(updatedWishlist));
-    }else{
-    localStorage.setItem("wishList", JSON.stringify([...getWishListProd, product]));
-    setIsLiked(true)
-    
-  }
-}
-
+    const getWishListProd = JSON.parse(
+      localStorage.getItem("wishList") || "[]",
+    );
+    if (isLiked) {
+      const updatedWishlist = getWishListProd.filter(
+        (wishListProd: ProductDetail) => wishListProd.id !== id,
+      );
+      setIsLiked(false);
+      localStorage.setItem("wishList", JSON.stringify(updatedWishlist));
+      toast.info(`${product.title} removed from wishlist.`);
+    } else {
+      localStorage.setItem(
+        "wishList",
+        JSON.stringify([...getWishListProd, product]),
+      );
+      setIsLiked(true);
+      toast.success(`${product.title} added to wishlist.`);
+    }
+  };
 
   return (
     <article className="rounded-card border border-border bg-bg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -95,6 +107,5 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
     </article>
   );
 };
-
 
 export default ProductCard;
