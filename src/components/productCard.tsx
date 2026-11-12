@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ProductDetail } from "@/types/product";
 import { toast } from "sonner";
+import { CartProductType } from "@/types/cartProductTypet";
 
 const ProductCard = ({ product }: { product: ProductDetail }) => {
   const { id, thumbnail, brand, title, price, rating, discountPercentage } =
@@ -42,6 +43,33 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
       toast.success(`${product.title} added to wishlist.`);
     }
   };
+
+  const handleCart = () => {
+    const existingCartItems: CartProductType[] = JSON.parse(
+      localStorage.getItem("cart") || "[]",
+    );
+    const isExisting = existingCartItems.some(
+      (cartProduct) => cartProduct.id === id,
+    ); // true or false
+
+    if (isExisting) {
+      const updatedCartItems = existingCartItems.map((cartItem) => {
+        if (cartItem.id === id) {
+          return { ...cartItem, quantity: cartItem.quantity + 1 };
+        } else {
+          return cartItem;
+        }
+      });
+
+      localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+    } else {
+      localStorage.setItem(
+        "cart",
+        JSON.stringify([...existingCartItems, { ...product, quantity: 1 }]),
+      );
+    }
+  };
+
 
   return (
     <article className="rounded-card border border-border bg-bg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -94,14 +122,13 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
           >
             View Product
           </Link>
-          <Link
-            href={"/cart"}
-            type="button"
+          <button
+          onClick={handleCart}
             aria-label="add to cart"
             className="flex cursor-pointer items-center justify-center rounded-lg border border-border shadow-sm px-3 bg-surface hover:bg-bg"
           >
             <HiOutlineShoppingBag />
-          </Link>
+          </button>
         </div>
       </div>
     </article>

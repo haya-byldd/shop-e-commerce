@@ -7,6 +7,7 @@ import Link from "next/link";
 import { BsShieldCheck } from "react-icons/bs";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { toast } from "sonner";
+import { CartProductType } from "@/types/cartProductTypet";
 
 const ProductOverview = ({ product }: { product: ProductDetail }) => {
   const {
@@ -29,6 +30,7 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [isLiked, setIsLiked] = useState(false);
 
+
   const handleDecreaseQuantity = () => {
     setQuantity((prevQuantity) => {
       if (prevQuantity > 1) {
@@ -43,10 +45,11 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
     });
   };
 
-  const getWishListProduct = JSON.parse(
+  
+  useEffect(() => {
+    const getWishListProduct = JSON.parse(
     localStorage.getItem("wishList") || "[]",
   );
-  useEffect(() => {
     const isAlreadyExist = getWishListProduct.some(
       (wishListProd: ProductDetail) => wishListProd.id === id,
     );
@@ -54,6 +57,9 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
   },[id]);
 
   const handleWishList = () => {
+    const getWishListProduct = JSON.parse(
+    localStorage.getItem("wishList") || "[]",
+  );
     if (isLiked) {
       const updatedWishListProd = getWishListProduct.filter(
         (wishListProd: ProductDetail) => wishListProd.id !== id,
@@ -70,6 +76,32 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
       toast.success(`${title} added to wishlist.`);
     }
   };
+
+  const handleCart = () => {
+    const existingCartItems: CartProductType[] = JSON.parse(localStorage.getItem("cart") || '[]');
+    const isExisting= existingCartItems.some((cartProduct) => cartProduct.id === id); // true or false 
+    
+     
+
+    if(isExisting){
+     
+       const updatedCartItems = existingCartItems.map((cartItem)=>{
+         if(cartItem.id === id){
+          return {...cartItem, quantity: cartItem.quantity + 1}
+         } else{
+          return cartItem
+         }
+       })
+
+       localStorage.setItem("cart", JSON.stringify(updatedCartItems))
+
+
+
+
+    }else{
+         localStorage.setItem("cart", JSON.stringify([...existingCartItems, {...product, quantity: 1}]))     
+    }
+  }
 
   return (
     <section>
@@ -168,13 +200,12 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
               </button>
             </div>
 
-            <Link
-              href="/cart"
+            <button
+            onClick={handleCart}
               className="flex-1 text-center text-sm font-medium btn-primary transition"
             >
               Add to Cart
-            </Link>
-
+            </button>
 
            
             <button
