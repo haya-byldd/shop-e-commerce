@@ -1,17 +1,18 @@
 "use client";
 import { FaStar, FaRegHeart, FaHeart } from "react-icons/fa";
 import Image from "next/image";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ProductDetail } from "@/types/product";
 import { toast } from "sonner";
 import { CartProductType } from "@/types/cartProductTypet";
+import { TbShoppingBag, TbShoppingBagCheck } from "react-icons/tb";
 
 const ProductCard = ({ product }: { product: ProductDetail }) => {
   const { id, thumbnail, brand, title, price, rating, discountPercentage } =
     product;
   const [isLiked, setIsLiked] = useState(false);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
 
   useEffect(() => {
     const getWishListProd = JSON.parse(
@@ -44,6 +45,16 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
     }
   };
 
+  useEffect(() => {
+    const existingCartItems: CartProductType[] = JSON.parse(
+      localStorage.getItem("cart") || "[]",
+    );
+    const isExisting = existingCartItems.some(
+      (cartItems) => cartItems.id === id,
+    );
+    setIsAddedToCart(isExisting);
+  }, [id]);
+
   const handleCart = () => {
     const existingCartItems: CartProductType[] = JSON.parse(
       localStorage.getItem("cart") || "[]",
@@ -62,14 +73,16 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
       });
 
       localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+      toast.success(`${title}`);
     } else {
       localStorage.setItem(
         "cart",
         JSON.stringify([...existingCartItems, { ...product, quantity: 1 }]),
       );
+      toast.success(`${title} added to cart.`);
+      setIsAddedToCart(true);
     }
   };
-
 
   return (
     <article className="rounded-card border border-border bg-bg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -122,13 +135,25 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
           >
             View Product
           </Link>
-          <button
-          onClick={handleCart}
-            aria-label="add to cart"
-            className="flex cursor-pointer items-center justify-center rounded-lg border border-border shadow-sm px-3 bg-surface hover:bg-bg"
-          >
-            <HiOutlineShoppingBag />
-          </button>
+
+          {isAddedToCart ? (
+            <Link
+              href="/cart"
+              title="Go to cart"
+              className="flex cursor-pointer items-center justify-center rounded-lg border border-border shadow-sm px-3 bg-surface hover:bg-bg"
+            >
+              <TbShoppingBagCheck size={20} />
+            </Link>
+          ) : (
+            <button
+              onClick={handleCart}
+              aria-label="add to cart"
+              title="Add to cart"
+              className="flex cursor-pointer items-center justify-center rounded-lg border border-border shadow-sm px-3 bg-surface hover:bg-bg"
+            >
+              <TbShoppingBag size={20} />
+            </button>
+          )}
         </div>
       </div>
     </article>

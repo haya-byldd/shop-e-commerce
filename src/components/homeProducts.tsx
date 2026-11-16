@@ -15,6 +15,7 @@ const HomeProducts = () => {
     const productsData = data.products;
     setProducts(productsData);
   };
+  
 
   useEffect(() => {
     fetchFeaturedProducts();

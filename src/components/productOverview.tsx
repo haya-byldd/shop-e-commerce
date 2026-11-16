@@ -1,15 +1,19 @@
 "use client";
 import Image from "next/image";
-import { FaHeart, FaMinus, FaPlus, FaRegHeart, FaStar } from "react-icons/fa";
+import { PiArrowFatLineRightFill } from "react-icons/pi";
+import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
 import { ProductDetail } from "@/types/product";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { BsShieldCheck } from "react-icons/bs";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { toast } from "sonner";
 import { CartProductType } from "@/types/cartProductTypet";
+import { GiShoppingBag } from "react-icons/gi";
+import Link from "next/link";
 
 const ProductOverview = ({ product }: { product: ProductDetail }) => {
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const {
     id,
     thumbnail,
@@ -27,41 +31,23 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
     shippingInformation,
     warrantyInformation,
   } = product;
-  const [quantity, setQuantity] = useState<number>(1);
-  const [isLiked, setIsLiked] = useState(false);
 
-
-  const handleDecreaseQuantity = () => {
-    setQuantity((prevQuantity) => {
-      if (prevQuantity > 1) {
-        return prevQuantity - 1;
-      }
-      return prevQuantity;
-    });
-  };
-  const handleIncreaseQuantity = () => {
-    setQuantity((prevQuantity) => {
-      return prevQuantity + 1;
-    });
-  };
-
-  
   useEffect(() => {
     const getWishListProduct = JSON.parse(
-    localStorage.getItem("wishList") || "[]",
-  );
+      localStorage.getItem("wishList") || "[]",
+    );
     const isAlreadyExist = getWishListProduct.some(
       (wishListProd: ProductDetail) => wishListProd.id === id,
     );
     setIsLiked(isAlreadyExist);
-  },[id]);
+  }, [id]);
 
   const handleWishList = () => {
-    const getWishListProduct = JSON.parse(
-    localStorage.getItem("wishList") || "[]",
-  );
+    const existingWishListProduct = JSON.parse(
+      localStorage.getItem("wishList") || "[]",
+    );
     if (isLiked) {
-      const updatedWishListProd = getWishListProduct.filter(
+      const updatedWishListProd = existingWishListProduct.filter(
         (wishListProd: ProductDetail) => wishListProd.id !== id,
       );
       setIsLiked(false);
@@ -70,38 +56,47 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
     } else {
       localStorage.setItem(
         "wishList",
-        JSON.stringify([...getWishListProduct, product]),
+        JSON.stringify([...existingWishListProduct, product]),
       );
       setIsLiked(true);
       toast.success(`${title} added to wishlist.`);
     }
   };
 
+  useEffect(() => {
+    const existingCartItems: CartProductType[] = JSON.parse(localStorage.getItem("cart") || "[]");
+    const isAlreadyExist = existingCartItems.some((cartItem) => cartItem.id === id);
+    setIsAddedToCart(isAlreadyExist);
+  }, [id])
+
   const handleCart = () => {
-    const existingCartItems: CartProductType[] = JSON.parse(localStorage.getItem("cart") || '[]');
-    const isExisting= existingCartItems.some((cartProduct) => cartProduct.id === id); // true or false 
-    
-     
-
-    if(isExisting){
-     
-       const updatedCartItems = existingCartItems.map((cartItem)=>{
-         if(cartItem.id === id){
-          return {...cartItem, quantity: cartItem.quantity + 1}
-         } else{
-          return cartItem
-         }
-       })
-
-       localStorage.setItem("cart", JSON.stringify(updatedCartItems))
+    const existingCartItems: CartProductType[] = JSON.parse(
+      localStorage.getItem("cart") || "[]",
+    );
+    const isExisting = existingCartItems.some(
+      (cartProduct) => cartProduct.id === id,
+    ); // true or false
 
 
+    if (isExisting) {
+      const updatedCartItems = existingCartItems.map((cartItem) => {
+        if (cartItem.id === id) {
+          return { ...cartItem, quantity: cartItem.quantity + 1 };
+        } else {
+          return cartItem;
+        }
+      });
 
-
-    }else{
-         localStorage.setItem("cart", JSON.stringify([...existingCartItems, {...product, quantity: 1}]))     
+      localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+    } else {
+      localStorage.setItem(
+        "cart",
+        JSON.stringify([...existingCartItems, { ...product, quantity: 1 }]),
+      );
+      setIsAddedToCart(true);
+      toast.success(`${title} added to cart`)
     }
-  }
+  };
 
   return (
     <section>
@@ -174,46 +169,38 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
             <span className="text-fg-muted">({stock} available)</span>
           </div>
           <div className="border-t border-border my-7"></div>
-          <div className="flex flex-wrap gap-3">
-            <div className="flex items-center border border-border rounded-button overflow-hidden">
-              <button
-                onClick={handleDecreaseQuantity}
-                id="decrease"
-                className="px-4 py-3 hover:bg-btn hover:text-bg hover:rounded-button bg-surface overflow-hidden disabled:cursor-not-allowed"
-                disabled={quantity === 1}
-                aria-label="Decrease quantity"
+          <div className="flex flex-wrap gap-4">
+            {isAddedToCart ? (
+              <Link
+                href="/cart"
+                className="flex-1 text-center text-sm font-medium btn-primary transition"
               >
-                <FaMinus className="text-xs" />
-              </button>
-
-              <span id="quantity" className="px-3 text-sm">
-                {quantity}
-              </span>
-
+                <span className="flex items-center justify-center gap-2 text-base">
+                  Go to Cart
+                  <PiArrowFatLineRightFill size={18} />
+                </span>
+              </Link>
+            ) : (
               <button
-                onClick={handleIncreaseQuantity}
-                id="increase"
-                className="px-4 py-3 hover:bg-btn hover:text-bg hover:rounded-button bg-surface overflow-hidden"
-                aria-label="Increase quantity"
+                onClick={handleCart}
+                className="flex-1 text-center text-sm font-medium btn-primary transition"
               >
-                <FaPlus className="text-xs" />
+                <span className="flex items-center justify-center gap-2 text-base">
+                  <GiShoppingBag /> Add to Cart
+                </span>
               </button>
-            </div>
+            )}
 
-            <button
-            onClick={handleCart}
-              className="flex-1 text-center text-sm font-medium btn-primary transition"
-            >
-              Add to Cart
-            </button>
-
-           
             <button
               onClick={handleWishList}
-          className={`cursor-pointer border border-border rounded-button px-4 ${isLiked ? "bg-red-50" : "bg-surface"}`}   
+              className={`cursor-pointer border border-border rounded-button px-4 hover:bg-red-50 ${isLiked ? "bg-red-50" : "bg-surface"}`}
               aria-label="Add to wishlist"
             >
-              {isLiked ? <FaHeart className="text-red-600" /> : <FaRegHeart />}
+              {isLiked ? (
+                <FaHeart className="text-red-600" />
+              ) : (
+                <FaRegHeart className="hover:text-red-600 hover:bg-red-50" />
+              )}
             </button>
           </div>
           <p className="text-xs text-fg-muted mt-3">
