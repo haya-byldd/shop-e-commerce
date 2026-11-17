@@ -1,46 +1,123 @@
+import { CartProductType } from "@/types/cartProductTypet";
+import { useState } from "react";
+import { FaMinus, FaPlus } from "react-icons/fa";
+import Image from "next/image";
 
-const CartProduct = () => {
+const CartProduct = ({ product, setCartProduct }: { product: CartProductType, setCartProduct: any }) => {
+  const { thumbnail, title, price, id, quantity } = product;
+  const [currentQuantity, setCurrentQuantity] = useState(quantity);
+
+  function handleDecreaseQuantity() {
+    setCurrentQuantity((prevQuantity) => {
+      if (prevQuantity > 1) {
+        return prevQuantity - 1;
+      } else {
+        return prevQuantity;
+      }
+    });
+  
+    const existingCartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+    const isAlreadyExist = existingCartItems.some((existingcartItem : CartProductType) => existingcartItem.id === id );
+
+    if(isAlreadyExist){
+      const updatedCartItems = existingCartItems.map((cartItem : CartProductType) => {
+        if(cartItem.id === id){
+          return {...cartItem, quantity: cartItem.quantity - 1};
+        }else{
+          return cartItem
+        }
+      })
+
+      localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+    }
+  }
+
+  function handleIncreaseQuantity() {
+    setCurrentQuantity((prevQuantity) => {
+      return prevQuantity + 1;
+    });
+
+    const existingCartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+    const isAlreadyExisting = existingCartItems.some(
+      (cartItem: CartProductType) => cartItem.id === id,
+    );
+
+    if (isAlreadyExisting) {
+      const updatedCartItems = existingCartItems.map(
+        (existingCartItem: CartProductType) => {
+          if (existingCartItem.id === id) {
+            return {
+              ...existingCartItem,
+              quantity: existingCartItem.quantity + 1,
+            };
+          } else {
+            return existingCartItem;
+          }
+        },
+      );
+
+      localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+    }
+  }
+
+  const handleRemoveCart = () => {
+    const existingCartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+    const updatedCartItems = existingCartItems.filter(
+      (cartItem: CartProductType) => cartItem.id !== id,
+    );
+    localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+    setCartProduct(updatedCartItems)
+    };
+
+
   return (
-    <article className="border border-border flex-1">
-      {/* <div className="flex">
-        <div className="flex p-4 rounded-card">
-          <div>
-            <Image src={thumbnail} alt={title} loading="eager">{thumbnail}</Image>
-          </div>
-          <h2>{title}</h2>
+    <article className="border border-border p-6 rounded-card flex justify-between">
+      <div className="flex gap-4 items-center">
+        <div className="border border-border rounded-card bg-surface">
+          <Image
+            src={thumbnail}
+            alt={title}
+            width={100}
+            height={100}
+            loading="eager"
+          ></Image>
         </div>
         <div>
-          <button>{quantity}</button>
-          <button>remove button</button>
+          <h4 className="font-medium">{title}</h4>
+          <p className="text-sm font-medium text-fg-muted">${price}</p>
         </div>
-      </div> */}
+      </div>
+      <div className="flex items-center gap-4">
+        <div className="flex items-center border border-border rounded-button overflow-hidden">
+          <button
+            onClick={handleDecreaseQuantity}
+            id="decrease"
+            className="px-4 py-3 hover:bg-btn hover:text-bg hover:rounded-button bg-surface overflow-hidden disabled:cursor-not-allowed"
+            disabled={currentQuantity === 1}
+            aria-label="Decrease quantity"
+          >
+            <FaMinus className="text-xs" />
+          </button>
 
-        {/* <div className="flex items-center border border-border rounded-button overflow-hidden">
-                    <button
-                      onClick={handleDecreaseQuantity}
-                      id="decrease"
-                      className="px-4 py-3 hover:bg-btn hover:text-bg hover:rounded-button bg-surface overflow-hidden disabled:cursor-not-allowed"
-                      disabled={quantity === 1}
-                      aria-label="Decrease quantity"
-                    >
-                      <FaMinus className="text-xs" />
-                    </button>
-      
-                    <span id="quantity" className="px-3 text-sm">
-                      {quantity}
-                    </span>
-      
-                    <button
-                      onClick={handleIncreaseQuantity}
-                      id="increase"
-                      className="px-4 py-3 hover:bg-btn hover:text-bg hover:rounded-button bg-surface overflow-hidden"
-                      aria-label="Increase quantity"
-                    >
-                      <FaPlus className="text-xs" />
-                    </button>
-                  </div> */}
+          <span id="quantity" className="px-3 text-sm">
+            {currentQuantity}
+          </span>
+
+          <button
+            onClick={handleIncreaseQuantity}
+            id="increase"
+            className="px-4 py-3 hover:bg-btn hover:text-bg hover:rounded-button bg-surface overflow-hidden"
+            aria-label="Increase quantity"
+          >
+            <FaPlus className="text-xs" />
+          </button>
+        </div>
+
+        <button className="btn-primary text-sm" onClick={handleRemoveCart}>
+          Remove
+        </button>
+      </div>
     </article>
   );
 };
-
 export default CartProduct;

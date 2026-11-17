@@ -1,9 +1,10 @@
-import WishlistPage from "@/components/wishListPage"
+import WishlistPage from "@/templates/wishlistPage";
 
-const WishList = () => {
+const Wishlist = () => {
   return (
+
     <WishlistPage/>
   )
 }
 
-export default WishList;
+export default Wishlist;
