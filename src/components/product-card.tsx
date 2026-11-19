@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { CartProductType } from "@/types/cartProductTypet";
 import { TbShoppingBag, TbShoppingBagCheck } from "react-icons/tb";
 
-const ProductCard = ({ product }: { product: ProductDetail }) => {
+const ProductCard = ({ product,setWishList }: { product: ProductDetail,setWishList:any }) => {
   const { id, thumbnail, brand, title, price, rating, discountPercentage } =
     product;
   const [isLiked, setIsLiked] = useState(false);
@@ -34,6 +34,7 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
       );
       setIsLiked(false);
       localStorage.setItem("wishList", JSON.stringify(updatedWishlist));
+      setWishList(updatedWishlist);
       toast.info(`${product.title} removed from wishlist.`);
     } else {
       localStorage.setItem(

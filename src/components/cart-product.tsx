@@ -2,6 +2,7 @@ import { CartProductType } from "@/types/cartProductTypet";
 import { useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import Image from "next/image";
+import Link from "next/link";
 
 const CartProduct = ({
   product,
@@ -21,8 +22,6 @@ const CartProduct = ({
         return prevQuantity;
       }
     });
-
-
     const existingCartItems = JSON.parse(localStorage.getItem("cart") || "[]");
     const isAlreadyExist = existingCartItems.some(
       (existingcartItem: CartProductType) => existingcartItem.id === id,
@@ -40,6 +39,7 @@ const CartProduct = ({
       );
 
       localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+      setCartProducts(updatedCartItems)
     }
   }
 
@@ -68,9 +68,8 @@ const CartProduct = ({
       );
 
       localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+      setCartProducts(updatedCartItems)
     }
-
-
   }
 
   const handleRemoveCart = () => {
@@ -95,8 +94,14 @@ const CartProduct = ({
           ></Image>
         </div>
         <div>
-          <h4 className="font-medium">{title}</h4>
-          <p className="text-sm font-medium text-fg-muted">${Math.round(price)}</p>
+          <Link href={`/product/${id}`}>
+            <h4 className="tracking-tight text-fg hover:underline hover:underline-offset-2">
+              {title}
+            </h4>
+          </Link>
+          <p className="text-sm font-medium text-fg-muted">
+            ${Math.round(price)}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-4">
@@ -130,7 +135,7 @@ const CartProduct = ({
         </button>
 
         <div className="font-semibold text-sm ml-5">
-          <p>${Math.round(price*currentQuantity)}</p>
+          <p>${Math.round(price * currentQuantity)}</p>
         </div>
       </div>
     </article>
