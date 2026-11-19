@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ProductDetail } from "@/types/product";
-import ProductCard from "./productCard";
+import ProductCard from "./product-card";
 
 const ProductList = () => {
   const [products, setProducts] = useState<ProductDetail[]>([]);

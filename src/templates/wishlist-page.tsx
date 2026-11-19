@@ -4,7 +4,7 @@
 //This is a client vs. server rendering issue in Next.js.
 // we'll use useEffect to get the data from local storage.
 
-import ProductCard from "@/components/productCard";
+import ProductCard from "@/components/product-card";
 import { ProductDetail } from "@/types/product";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -24,7 +24,7 @@ const WishlistPage = () => {
 
  if (wishList.length === 0) {
   return (
-    <main className="max-w-340 w-full mx-auto px-6 py-16">
+    <div className="max-w-340 w-full mx-auto px-6 py-16">
       <div className="border border-border min-h-[57vh] max-w-2xl bg-surface rounded-card  mx-auto flex flex-col items-center justify-center text-center">
         <div className="flex items-center justify-center w-20 h-20 rounded-full bg-red-50 mb-6">
           <FaHeart className="text-3xl text-red-500" />
@@ -47,12 +47,12 @@ const WishlistPage = () => {
         </Link>
 
       </div>
-    </main>
+    </div>
   );
 }
 
   return (
-  <main className="max-w-340 w-full mx-auto px-6 py-15">
+  <div className="max-w-340 w-full mx-auto px-6 py-15">
 
   <div className="mb-8">
     <h1 className="text-2xl font-semibold text-fg">
@@ -70,7 +70,7 @@ const WishlistPage = () => {
     ))}
   </div>
 
-</main>
+</div>
   );
 };
 

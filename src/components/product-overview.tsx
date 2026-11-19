@@ -156,7 +156,7 @@ const ProductOverview = ({ product }: { product: ProductDetail }) => {
             </div>
           </div>
           <div className="flex items-center gap-3 mt-6">
-            <h3 className="text-3xl font-semibold">${price}</h3>
+            <h3 className="text-3xl font-semibold">${Math.round(price)}</h3>
             <span className="bg-red-50 text-danger text-xs px-3 py-1 rounded-full">
               {Math.round(discountPercentage)}% Off
             </span>

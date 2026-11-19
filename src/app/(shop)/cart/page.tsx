@@ -1,4 +1,4 @@
-import CartPage from "@/templates/cartPage";
+import CartPage from "@/templates/cart-page";
 
 const Cart = () => {
     return(

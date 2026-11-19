@@ -3,12 +3,12 @@
 
 import { useParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import ProductOverview from "@/components/productOverview";
-import ProductInformation from "@/components/productInformation";
-import ProductReviews from "@/components/productReviews";
-import { ProductDetail } from "@/types/product";
+import ProductOverview from "@/components/product-overview";
+import ProductInformation from "@/components/product-information";
+import ProductReviews from "@/components/product-reviews";
+import type { ProductDetail } from "@/types/product";
 
-const ProductDetailsContent = () => {
+const ProductDetailContent = () => {
   const { id } = useParams();
 
   const [productDetail, setProductDetail] =
@@ -33,29 +33,29 @@ const ProductDetailsContent = () => {
 
   if (!productDetail) {
     return (
-      <main className="flex justify-center items-center h-dvh">
+      <div className="flex justify-center items-center h-dvh">
         <h1 className="font-semibold text-lg text-amber-600">
           Loading
         </h1>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="max-w-340 w-full mx-auto p-8">
+    <div className="max-w-340 w-full mx-auto p-8">
       <ProductOverview product={productDetail} />
       <ProductInformation product={productDetail} />
       <ProductReviews product={productDetail} />
-    </main>
+    </div>
   );
 };
 
-const ProductDetails = () => {
+const ProductDetail = () => {
   return (
     <Suspense fallback={<p>Loading product details...</p>}>
-      <ProductDetailsContent />
+      <ProductDetailContent />
     </Suspense>
   );
 };
 
-export default ProductDetails;
+export default ProductDetail;

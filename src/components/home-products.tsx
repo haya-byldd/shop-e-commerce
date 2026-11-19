@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import ProductCard from "./productCard";
+import ProductCard from "./product-card";
 import { ProductDetail } from "@/types/product";
 
 const HomeProducts = () => {

@@ -1,4 +1,4 @@
-import WishlistPage from "@/templates/wishlistPage";
+import WishlistPage from "@/templates/wishlist-page";
 
 const Wishlist = () => {
   return (

@@ -2,6 +2,7 @@ import { FaStar } from "react-icons/fa";
 import { ProductDetail } from "@/types/product";
 
 const ProductReviews = ({ product }: { product: ProductDetail }) => {
+  const {rating,reviews} =product;
   return (
     <section className="mt-20 border-t border-border py-10">
       <div className="flex flex-wrap items-center justify-between gap-5">
@@ -12,7 +13,7 @@ const ProductReviews = ({ product }: { product: ProductDetail }) => {
           <h2 className="text-2xl font-semibold mt-3">Customer Feedback</h2>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-3xl font-semibold">{product.rating}</span>
+          <span className="text-3xl font-semibold">{rating}</span>
 
           <div>
             <p className="text-amber-500">
@@ -25,7 +26,7 @@ const ProductReviews = ({ product }: { product: ProductDetail }) => {
               </span>
             </p>
             <p className="text-xs text-fg-muted">
-              Based on {product.reviews.length} reviews
+              Based on {reviews.length} reviews
             </p>
           </div>
         </div>

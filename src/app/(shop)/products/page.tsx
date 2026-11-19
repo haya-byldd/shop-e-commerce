@@ -1,8 +1,8 @@
-import ProductPage from "@/templates/productPage";
+import ProductsPage from "@/templates/products-page";
 
 const ProductsRoutePage = () => {
     return (
-      <ProductPage/>
+      <ProductsPage/>
     )
 }
 

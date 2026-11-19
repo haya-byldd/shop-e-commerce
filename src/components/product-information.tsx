@@ -2,6 +2,7 @@ import { FaTimes } from "react-icons/fa";
 import { ProductDetail } from "@/types/product";
 
 const ProductInformation = ({ product }: { product: ProductDetail }) => {
+  const {brand,category,sku,weight,returnPolicy,minimumOrderQuantity,dimensions,meta} = product;
   return (
     <section className="mt-20 border-t border-border pt-10">
       <div className="grid md:grid-cols-2 gap-12">
@@ -14,7 +15,7 @@ const ProductInformation = ({ product }: { product: ProductDetail }) => {
 
           <p className="text-sm text-fg-muted leading-7 mt-4">
             Explore the specifications and additional information about this
-            product.
+            
           </p>
         </div>
 
@@ -23,42 +24,42 @@ const ProductInformation = ({ product }: { product: ProductDetail }) => {
             <span className="text-fg-muted"> Brand</span>
             <span className="font-medium">
               {" "}
-              {product.brand || "Unbranded"}
+              {brand || "Unbranded"}
             </span>
           </div>
 
           <div className="flex justify-between py-4 text-sm">
             <span className="text-fg-muted">Category</span>
-            <span className="font-medium">{product.category}</span>
+            <span className="font-medium">{category}</span>
           </div>
 
           <div className="flex justify-between py-4 text-sm">
             <span className="text-fg-muted">SKU</span>
-            <span className="font-medium">{product.sku}</span>
+            <span className="font-medium">{sku}</span>
           </div>
 
           <div className="flex justify-between py-4 text-sm">
             <span className="text-fg-muted">Weight</span>
-            <span className="font-medium">{product.weight}</span>
+            <span className="font-medium">{weight}</span>
           </div>
 
           <div className="flex justify-between py-4 text-sm">
             <span className="text-fg-muted">Return Policy</span>
-            <span className="font-medium">{product.returnPolicy}</span>
+            <span className="font-medium">{returnPolicy}</span>
           </div>
 
           <div className="flex justify-between py-4 text-sm">
             <span className="text-fg-muted">Minimum Order</span>
-            <span className="font-medium">{product.minimumOrderQuantity}</span>
+            <span className="font-medium">{minimumOrderQuantity}</span>
           </div>
           <div className="flex justify-between py-4 text-sm">
             <span className="text-fg-muted">Dimensions (W, H, D)</span>
             <span className="font-medium flex items-center gap-2">
-              {product.dimensions.width}
+              {dimensions.width}
               <FaTimes className="text-xs text-fg-muted" />
-              {product.dimensions.height}
+              {dimensions.height}
               <FaTimes className="text-xs text-fg-muted" />
-              {product.dimensions.depth} cm
+              {dimensions.depth} cm
             </span>
           </div>
         </div>
@@ -68,27 +69,27 @@ const ProductInformation = ({ product }: { product: ProductDetail }) => {
           <div className="flex justify-center items-center flex-col text-center py-4 sm:py-0 first:pt-0">
             <p className="text-sm text-fg-muted mb-2">Barcode</p>
             <p className="font-medium text-fg break-all">
-              {product.meta.barcode}
+              {meta.barcode}
             </p>
           </div>
 
           <div className="flex justify-center items-center flex-col text-center py-4 sm:py-0">
             <p className="text-sm text-fg-muted mb-2">Created At</p>
             <p className="text-sm text-fg">
-              {new Date(product.meta.createdAt).toLocaleDateString()}
+              {new Date(meta.createdAt).toLocaleDateString()}
             </p>
           </div>
 
           <div className="flex justify-center items-center flex-col text-center py-4 sm:py-0">
             <p className="text-sm text-fg-muted mb-2">Updated At</p>
             <p className="text-sm text-fg">
-              {new Date(product.meta.updatedAt).toLocaleDateString()}
+              {new Date(meta.updatedAt).toLocaleDateString()}
             </p>
           </div>
           <div className="flex justify-center items-center flex-col text-center py-4 sm:py-0 last:pb-0">
             <p className="text-sm text-fg-muted mb-2">QR Code</p>
             <img
-              src={product.meta.qrCode}
+              src={meta.qrCode}
               alt="Product QR Code"
               className="w-24 h-24 object-contain"
             />

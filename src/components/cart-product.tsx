@@ -3,7 +3,13 @@ import { useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import Image from "next/image";
 
-const CartProduct = ({ product, setCartProduct }: { product: CartProductType, setCartProduct: any }) => {
+const CartProduct = ({
+  product,
+  setCartProducts,
+}: {
+  product: CartProductType;
+  setCartProducts: any;
+}) => {
   const { thumbnail, title, price, id, quantity } = product;
   const [currentQuantity, setCurrentQuantity] = useState(quantity);
 
@@ -15,18 +21,23 @@ const CartProduct = ({ product, setCartProduct }: { product: CartProductType, se
         return prevQuantity;
       }
     });
-  
-    const existingCartItems = JSON.parse(localStorage.getItem("cart") || "[]");
-    const isAlreadyExist = existingCartItems.some((existingcartItem : CartProductType) => existingcartItem.id === id );
 
-    if(isAlreadyExist){
-      const updatedCartItems = existingCartItems.map((cartItem : CartProductType) => {
-        if(cartItem.id === id){
-          return {...cartItem, quantity: cartItem.quantity - 1};
-        }else{
-          return cartItem
-        }
-      })
+
+    const existingCartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+    const isAlreadyExist = existingCartItems.some(
+      (existingcartItem: CartProductType) => existingcartItem.id === id,
+    );
+
+    if (isAlreadyExist) {
+      const updatedCartItems = existingCartItems.map(
+        (cartItem: CartProductType) => {
+          if (cartItem.id === id) {
+            return { ...cartItem, quantity: cartItem.quantity - 1 };
+          } else {
+            return cartItem;
+          }
+        },
+      );
 
       localStorage.setItem("cart", JSON.stringify(updatedCartItems));
     }
@@ -58,6 +69,8 @@ const CartProduct = ({ product, setCartProduct }: { product: CartProductType, se
 
       localStorage.setItem("cart", JSON.stringify(updatedCartItems));
     }
+
+
   }
 
   const handleRemoveCart = () => {
@@ -66,9 +79,8 @@ const CartProduct = ({ product, setCartProduct }: { product: CartProductType, se
       (cartItem: CartProductType) => cartItem.id !== id,
     );
     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
-    setCartProduct(updatedCartItems)
-    };
-
+    setCartProducts(updatedCartItems);
+  };
 
   return (
     <article className="border border-border p-6 rounded-card flex justify-between">
@@ -84,7 +96,7 @@ const CartProduct = ({ product, setCartProduct }: { product: CartProductType, se
         </div>
         <div>
           <h4 className="font-medium">{title}</h4>
-          <p className="text-sm font-medium text-fg-muted">${price}</p>
+          <p className="text-sm font-medium text-fg-muted">${Math.round(price)}</p>
         </div>
       </div>
       <div className="flex items-center gap-4">
@@ -116,6 +128,10 @@ const CartProduct = ({ product, setCartProduct }: { product: CartProductType, se
         <button className="btn-primary text-sm" onClick={handleRemoveCart}>
           Remove
         </button>
+
+        <div className="font-semibold text-sm ml-5">
+          <p>${Math.round(price*currentQuantity)}</p>
+        </div>
       </div>
     </article>
   );

@@ -1,7 +1,7 @@
-import ProductDetails from "@/templates/productDetails";
+import ProductDetail from "@/templates/product-detail";
 
 const ProductDetailsPage = () => {
-  return <ProductDetails />;
+  return <ProductDetail />;
 };
 
 export default ProductDetailsPage;

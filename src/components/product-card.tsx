@@ -123,7 +123,7 @@ const ProductCard = ({ product }: { product: ProductDetail }) => {
         <h3 className="min-h-12 text-sm font-semibold leading-6">{title}</h3>
 
         <div className="flex items-center gap-2">
-          <p className="text-lg font-bold">${price}</p>
+          <p className="text-lg font-bold">${Math.round(price)}</p>
 
           <p className="text-xs text-fg-muted">Incl. discount</p>
         </div>

@@ -3,11 +3,15 @@ import Navbar from "@/components/navbar";
 
 const HomeLayout = ({children} : {children: React.ReactNode}) => {
     return(
-        <>
-            <Navbar/>
-            {children}
-            <Footer/>
-        </>
+         <div className="min-h-screen flex flex-col">
+      <Navbar />
+
+      <main className="flex-1">
+        {children}
+      </main>
+
+      <Footer />
+    </div>
     )
 }
 
